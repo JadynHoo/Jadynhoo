@@ -122,14 +122,14 @@
             <td>data</td>
             <td>可写</td>
             <td>
-                <?php if (is_writable(VAE_ROOT . 'data')): ?>
+                <?php if (is_writable(JT_ROOT . 'data')): ?>
                     可写
                 <?php else: ?>
                     不可写
                 <?php endif ?>
             </td>
-            <td class="<?php if(is_writable(VAE_ROOT . 'data'))echo 'yes'; ?>">
-                <?php if (is_writable(VAE_ROOT . 'data')): ?>
+            <td class="<?php if(is_writable(JT_ROOT . 'data'))echo 'yes'; ?>">
+                <?php if (is_writable(JT_ROOT . 'data')): ?>
                     <i class="layui-icon layui-icon-ok"></i>
                 <?php else: ?>
                     <i class="layui-icon layui-icon-close"></i>

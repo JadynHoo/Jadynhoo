@@ -178,10 +178,10 @@ return [
 
                 
                 // 创建数据库配置文件
-                if(false == file_put_contents(VAE_ROOT . "data/conf/database.php",$db_str)) {
+                if(false == file_put_contents(JT_ROOT . "data/conf/database.php",$db_str)) {
                     return vae_assign(0,'创建数据库配置文件失败，请检查目录权限');
                 }
-                if(false == file_put_contents(VAE_ROOT . "data/install.lock",'vaeThink安装鉴定文件，勿删！！！！！此次安装时间：'.date('Y-m-d H:i:s',time()))) {
+                if(false == file_put_contents(JT_ROOT . "data/install.lock",'vaeThink安装鉴定文件，勿删！！！！！此次安装时间：'.date('Y-m-d H:i:s',time()))) {
                     return vae_assign(0,'创建安装鉴定文件失败，请检查目录权限');
                 }
                 

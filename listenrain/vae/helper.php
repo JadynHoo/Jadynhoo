@@ -211,7 +211,7 @@ function vae_upload($module,$use){
     }
     //上传开始前的钩子
     vae_set_hook('upload_begin',$file);
-    $info = $file->rule('sha1')->move(VAE_ROOT . 'public' . DS . 'upload' . DS . $module . DS . $use);
+    $info = $file->rule('sha1')->move(JT_ROOT . 'public' . DS . 'upload' . DS . $module . DS . $use);
     if($info) {
         //文件上传成功后的钩子
         vae_set_hook('upload_end',$file);
@@ -234,7 +234,7 @@ function vae_is_installed()
 {
     static $vaeIsInstalled;
     if (empty($vaeIsInstalled)) {
-        $vaeIsInstalled = file_exists(VAE_ROOT . 'data/install.lock');
+        $vaeIsInstalled = file_exists(JT_ROOT . 'data/install.lock');
     }
     return $vaeIsInstalled;
 }
@@ -383,11 +383,11 @@ function vae_get_route_url($params = [], $url = '')
 function vae_send_sms($phone,$param,$code,$type="normal")
 {
     // 配置信息
-    include VAE_LTR."dayu/top/TopClient.php";
-    include VAE_LTR."dayu/top/TopLogger.php";
-    include VAE_LTR."dayu/top/request/AlibabaAliqinFcSmsNumSendRequest.php";
-    include VAE_LTR."dayu/top/ResultSet.php";
-    include VAE_LTR."dayu/top/RequestCheckUtil.php";
+    include JT_LTR."dayu/top/TopClient.php";
+    include JT_LTR."dayu/top/TopLogger.php";
+    include JT_LTR."dayu/top/request/AlibabaAliqinFcSmsNumSendRequest.php";
+    include JT_LTR."dayu/top/ResultSet.php";
+    include JT_LTR."dayu/top/RequestCheckUtil.php";
     
     $c = new \TopClient();
     $conf = config('dayuconfig');
