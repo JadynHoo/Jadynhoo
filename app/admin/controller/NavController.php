@@ -22,7 +22,7 @@ class NavController extends AdminCheckAuth
     //列表
     public function getNavList()
     {
-    	$param = vae_get_param();
+    	$param = jt_get_param();
         $where = array();
         if(!empty($param['keywords'])) {
             $where['id|name|title|desc'] = ['like', '%' . $param['keywords'] . '%'];
@@ -32,7 +32,7 @@ class NavController extends AdminCheckAuth
     			->order('create_time asc')
                 ->where($where)
     			->paginate($rows,false,['query'=>$param]);
-    	return vae_assign_table(0,'',$nav);
+    	return jt_assign_table(0,'',$nav);
     }
 
     //添加
@@ -45,13 +45,13 @@ class NavController extends AdminCheckAuth
     public function addSubmit()
     {
     	if($this->request->isPost()){
-    		$param = vae_get_param();
+    		$param = jt_get_param();
     		$result = $this->validate($param, 'app\admin\validate\Nav.add');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
 				\think\loader::model('Nav')->strict(false)->field(true)->insert($param);
-                return vae_assign();
+                return jt_assign();
             }
     	}
     }
@@ -59,7 +59,7 @@ class NavController extends AdminCheckAuth
     //修改
     public function edit()
     {
-        $id    = vae_get_param('id');
+        $id    = jt_get_param('id');
         $nav = Db::name('nav')->find($id);
         return view('',[
             'nav'=>$nav
@@ -70,16 +70,16 @@ class NavController extends AdminCheckAuth
     public function editSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Nav.edit');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 \think\loader::model('Nav')->where([
                     'id'=>$param['id']
                 ])->strict(false)->field(true)->update($param);
                 \think\Cache::clear('VAE_NAV');
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -87,18 +87,18 @@ class NavController extends AdminCheckAuth
     //删除
     public function delete()
     {
-        $id    = vae_get_param("id");
+        $id    = jt_get_param("id");
         $count = Db::name('NavInfo')->where([
             'nav_id' => $id
         ])->count();
         if($count > 0) {
-            return vae_assign(0,'该组下还有导航，无法删除');
+            return jt_assign(0,'该组下还有导航，无法删除');
         }
         if (Db::name('Nav')->delete($id) !== false) {
-            return vae_assign(1,"删除成功！");
+            return jt_assign(1,"删除成功！");
             \think\Cache::clear('VAE_NAV');
         } else {
-            return vae_assign(0,"删除失败！");
+            return jt_assign(0,"删除失败！");
         }
     }
 
@@ -106,26 +106,26 @@ class NavController extends AdminCheckAuth
     public function navInfo()
     {
         return view('',[
-            'nav_id' => vae_get_param('id')
+            'nav_id' => jt_get_param('id')
         ]);
     }
 
     //导航列表
     public function getNavInfoList()
     {
-        $id            = vae_get_param('id');
+        $id            = jt_get_param('id');
         $navInfoList = Db::name('NavInfo')->where([
             'nav_id' => $id
         ])->order('order asc')->select();
-        return vae_assign(0,'',$navInfoList);
+        return jt_assign(0,'',$navInfoList);
     }
 
     //添加导航
     public function addNavInfo()
     {
         return view('',[
-            'nav_id' => vae_get_param('id'),
-            'pid' => vae_get_param('pid')
+            'nav_id' => jt_get_param('id'),
+            'pid' => jt_get_param('pid')
         ]);
     }
 
@@ -133,15 +133,15 @@ class NavController extends AdminCheckAuth
     public function addNavInfoSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Nav.addInfo');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 \think\loader::model('NavInfo')->strict(false)->field(true)->insert($param);
                 //清除导航缓存
                 \think\Cache::clear('VAE_NAV');
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -150,17 +150,17 @@ class NavController extends AdminCheckAuth
     public function editNavInfoSubmit()
     {
         if($this->request->isPost()) {
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Nav.editInfo');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 $data[$param['field']] = $param['value'];
                 $data['id'] = $param['id'];
                 \think\loader::model('NavInfo')->strict(false)->field(true)->update($data);
                 //清除导航缓存
                 \think\Cache::clear('VAE_NAV');
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -168,13 +168,13 @@ class NavController extends AdminCheckAuth
     //删除
     public function deleteNavInfo()
     {
-        $id    = vae_get_param("id");
+        $id    = jt_get_param("id");
         if (Db::name('NavInfo')->delete($id) !== false) {
             //清除导航缓存
             \think\Cache::clear('VAE_NAV');
-            return vae_assign(1,"删除成功！");
+            return jt_assign(1,"删除成功！");
         } else {
-            return vae_assign(0,"删除失败！");
+            return jt_assign(0,"删除失败！");
         }
     }
 }

@@ -18,7 +18,7 @@ class ControllerBase extends Controller
     {
         parent::_initialize();
 
-        if (!vae_is_installed() && $this->request->module() != 'install') {
+        if (!jt_is_installed() && $this->request->module() != 'install') {
             header('Location: ' . '/index.php?s=install');
             die;
         }

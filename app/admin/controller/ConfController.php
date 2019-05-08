@@ -36,14 +36,14 @@ class ConfController extends AdminCheckAuth
     public function webConfSubmit()
     {
     	if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
     		$result = $this->validate($param, 'app\admin\validate\Conf.webConf');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 $conf = "<?php return ['admin_title'=>'{$param["admin_title"]}','title'=>'{$param["title"]}','keywords'=>'{$param["keywords"]}','logo'=>'{$param["logo"]}','desc'=>'{$param["desc"]}','icp'=>'{$param["icp"]}','code'=>'{$param["code"]}','domain'=>'{$param["domain"]}','port_cache_time'=>'{$param["port_cache_time"]}'];";
                 file_put_contents(JT_ROOT . "data/conf/extra/webconfig.php",$conf);
-                return vae_assign();
+                return jt_assign();
             }
     	}
     }
@@ -68,14 +68,14 @@ class ConfController extends AdminCheckAuth
     public function emailConfSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Conf.emailConf');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 $conf = "<?php return ['smtp'=>'{$param["smtp"]}','username'=>'{$param["username"]}','password'=>'{$param["password"]}','port'=>'{$param["port"]}','email'=>'{$param["email"]}','from'=>'{$param["from"]}','template'=>'{$param["template"]}'];";
                 file_put_contents(JT_ROOT . "data/conf/extra/emailconfig.php",$conf);
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -96,14 +96,14 @@ class ConfController extends AdminCheckAuth
     public function dayuConfSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Conf.dayuConf');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 $conf = "<?php return ['appkey'=>'{$param["appkey"]}','secretkey'=>'{$param["secretkey"]}','FreeSignName'=>'{$param["FreeSignName"]}'];";
                 file_put_contents(JT_ROOT . "data/conf/extra/dayuconfig.php",$conf);
-                return vae_assign();
+                return jt_assign();
             }
         }
     }

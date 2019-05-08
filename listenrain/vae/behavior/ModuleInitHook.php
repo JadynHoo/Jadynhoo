@@ -18,7 +18,7 @@ class ModuleInitHook
 
     public function run(&$param)
     {
-        if (!vae_is_installed()) {
+        if (!jt_is_installed()) {
             return;
         }
 
@@ -39,7 +39,7 @@ class ModuleInitHook
 
         if (!empty($moduleHookPlugin)) {
             foreach ($moduleHookPlugin as $hookPlugin) {
-                Hook::add($hookPlugin['hook'], vae_get_plugin_class($hookPlugin['plugin']));
+                Hook::add($hookPlugin['hook'], jt_get_plugin_class($hookPlugin['plugin']));
             }
         }
     }

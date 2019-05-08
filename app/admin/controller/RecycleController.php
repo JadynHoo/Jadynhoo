@@ -23,7 +23,7 @@ class RecycleController extends AdminCheckAuth
     //列表
     public function getRecycleList()
     {
-    	$param = vae_get_param();
+    	$param = jt_get_param();
         $where = array();
         if(!empty($param['keywords'])) {
             $where['a.id|a.title|a.keywords|a.desc|a.content|w.title'] = ['like', '%' . $param['keywords'] . '%'];
@@ -43,25 +43,25 @@ class RecycleController extends AdminCheckAuth
                     $item->delete_time = date('Y-m-d H:i:s',$item->delete_time);
                 });
 
-    	return vae_assign_table(0,'',$recycle);
+    	return jt_assign_table(0,'',$recycle);
     }
 
     //还原
     public function reduction()
     {
-        $id    = vae_get_param("id");
+        $id    = jt_get_param("id");
         $i = \think\loader::model('Article')->save(['delete_time'=>Null],['id'=>$id]);
-        return vae_assign(1,'还原成功');
+        return jt_assign(1,'还原成功');
     }
 
     //彻底删除
     public function delete()
     {
-        $id    = vae_get_param("id");
+        $id    = jt_get_param("id");
         if (Article::destroy($id,true) !== false) {
-            return vae_assign(1,"删除成功！");
+            return jt_assign(1,"删除成功！");
         } else {
-            return vae_assign(0,"删除失败！");
+            return jt_assign(0,"删除失败！");
         }
     }
 }

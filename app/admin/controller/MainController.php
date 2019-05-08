@@ -15,7 +15,7 @@ class MainController extends AdminCheckLogin
 {
     public function index()
     {
-        $adminMainHook = vae_set_hook_one('admin_main');
+        $adminMainHook = jt_set_hook_one('admin_main');
         if(!empty($adminMainHook)) {
         	return $adminMainHook;
         }

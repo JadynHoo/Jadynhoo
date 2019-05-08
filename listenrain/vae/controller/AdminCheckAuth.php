@@ -21,7 +21,7 @@ class AdminCheckAuth extends AdminCheckLogin
         $params = [
             'controller' => strtolower($this->request->controller()),
             'action'  => strtolower($this->request->action()),
-            'admin_id' => vae_get_login_admin('id')
+            'admin_id' => jt_get_login_admin('id')
         ];
         
         Hook::listen('admin_init',$params);

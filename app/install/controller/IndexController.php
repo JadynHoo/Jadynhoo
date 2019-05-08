@@ -19,7 +19,7 @@ class IndexController extends ControllerBase
         parent::_initialize();
         
         // 检测是否安装过
-        if (vae_is_installed()) {
+        if (jt_is_installed()) {
             return $this->error('你已经安装过该系统!');
         }
     }
@@ -73,10 +73,10 @@ class IndexController extends ControllerBase
     public function createData()
     {
         if($this->request->isPost()){
-            $data = vae_get_param();
+            $data = jt_get_param();
             $result = $this->validate($data, 'app\install\validate\Index');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 // 连接数据库
                 $link=@new mysqli("{$data['DB_HOST']}:{$data['DB_PORT']}",$data['DB_USER'],$data['DB_PWD']);
@@ -85,18 +85,18 @@ class IndexController extends ControllerBase
                 if (!is_null($error)) {
                     // 转义防止和alert中的引号冲突
                     $error=addslashes($error);
-                    return vae_assign(0,'数据库链接失败:'.$error);die;
+                    return jt_assign(0,'数据库链接失败:'.$error);die;
                 }
                 // 设置字符集
                 $link->query("SET NAMES 'utf8'");
                 if($link->server_info < 5.0){
-                    return vae_assign(0,'请将您的mysql升级到5.0以上');die;
+                    return jt_assign(0,'请将您的mysql升级到5.0以上');die;
                 }
                 // 创建数据库并选中
                 if(!$link->select_db($data['DB_NAME'])){
                     $create_sql='CREATE DATABASE IF NOT EXISTS '.$data['DB_NAME'].' DEFAULT CHARACTER SET utf8;';
                     if(!$link->query($create_sql)){
-                        return vae_assign(0,'数据库链接失败');die;
+                        return jt_assign(0,'数据库链接失败');die;
                     }
                     $link->select_db($data['DB_NAME']);
                 }
@@ -110,12 +110,12 @@ class IndexController extends ControllerBase
                 }
 
                 //插入管理员
-                $username    = vae_get_param('username');
-                $password    = vae_get_param('password');
+                $username    = jt_get_param('username');
+                $password    = jt_get_param('password');
                 $nickname    = 'Admin';
                 $thumb       = '/themes/admin_themes/lib/vaeyo/img/thumb.png';
-                $salt       = vae_set_salt(20);
-                $password    = vae_set_password($password,$salt);
+                $salt       = jt_set_salt(20);
+                $password    = jt_set_password($password,$salt);
                 $create_time = time();
                 $update_time = time();
 
@@ -124,7 +124,7 @@ class IndexController extends ControllerBase
                 ."VALUES "
                 ."('$username','$password','$nickname','$thumb','$salt','$create_time','$update_time')";
                 if(!$link->query($caeate_admin_sql)) {
-                    return vae_assign(0,'创建管理员信息失败');
+                    return jt_assign(0,'创建管理员信息失败');
                 }
                 $link->close();
                 $db_str="
@@ -179,13 +179,13 @@ return [
                 
                 // 创建数据库配置文件
                 if(false == file_put_contents(JT_ROOT . "data/conf/database.php",$db_str)) {
-                    return vae_assign(0,'创建数据库配置文件失败，请检查目录权限');
+                    return jt_assign(0,'创建数据库配置文件失败，请检查目录权限');
                 }
                 if(false == file_put_contents(JT_ROOT . "data/install.lock",'vaeThink安装鉴定文件，勿删！！！！！此次安装时间：'.date('Y-m-d H:i:s',time()))) {
-                    return vae_assign(0,'创建安装鉴定文件失败，请检查目录权限');
+                    return jt_assign(0,'创建安装鉴定文件失败，请检查目录权限');
                 }
                 
-                return vae_assign();
+                return jt_assign();
             }
         }
     }  

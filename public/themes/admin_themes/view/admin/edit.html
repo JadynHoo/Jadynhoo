@@ -54,7 +54,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">分组</label>
     <div class="layui-input-block">
-      {volist name=":vae_get_admin_group()" id="v"}
+      {volist name=":jt_get_admin_group()" id="v"}
       <input type="checkbox" name="group_id[]" title="{$v.title}" value="{$v.id}" {volist name="$admin.group_id" id="a"}{eq name="$a" value="$v.id"}checked{/eq}{/volist}>
       {/volist}
     </div>

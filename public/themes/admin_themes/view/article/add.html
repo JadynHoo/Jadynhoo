@@ -23,7 +23,7 @@
     <div class="layui-input-block" style="max-width: 600px;">
       <select name="article_cate_id" lay-verify="required" lay-search="">
         <option>请选择分类</option>
-        {volist name=":vae_set_recursion(vae_get_article_cate())" id="v"}
+        {volist name=":jt_set_recursion(jt_get_article_cate())" id="v"}
         <option value="{$v.id}">{$v.title}</option>
         {/volist}
       </select>

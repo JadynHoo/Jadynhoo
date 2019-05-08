@@ -16,14 +16,14 @@ class ApiController extends AdminCheckLogin
     //上传文件
     public function upload()
     {
-        $param = vae_get_param();
+        $param = jt_get_param();
         $module = isset($param['module']) ? $param['module'] : 'admin';
         $use = isset($param['use']) ? $param['use'] : 'thumb';
-        $res = vae_upload($module,$use);
+        $res = jt_upload($module,$use);
         if($res['code'] == 1){
-            return vae_assign(1,'',$res['data']);
+            return jt_assign(1,'',$res['data']);
         }
-        return vae_assign(0,$res['msg']);
+        return jt_assign(0,$res['msg']);
     }
 
 
@@ -71,51 +71,51 @@ class ApiController extends AdminCheckLogin
     //获取权限树所需的节点列表
     public function getRuleTree()
     {
-        $rule = vae_get_admin_rule();
+        $rule = jt_get_admin_rule();
         $group = [];
-        if(!empty(vae_get_param('id'))) {
-            $group = vae_get_admin_group_info(vae_get_param('id'))['rules'];
+        if(!empty(jt_get_param('id'))) {
+            $group = jt_get_admin_group_info(jt_get_param('id'))['rules'];
         }
         $list = $this->list_to_tree($rule,$group);
         $data['trees'] = $list;
-        return vae_assign(0,'',$data);
+        return jt_assign(0,'',$data);
     }
 
     //获取菜单树列表
     public function getMenuTree()
     {
-        $rule = vae_get_admin_menu();
+        $rule = jt_get_admin_menu();
         $group = [];
-        if(!empty(vae_get_param('id'))) {
-            $group = vae_get_admin_group_info(vae_get_param('id'))['menus'];
+        if(!empty(jt_get_param('id'))) {
+            $group = jt_get_admin_group_info(jt_get_param('id'))['menus'];
         }
         $list = $this->list_to_tree($rule,$group);
         $data['trees'] = $list;
-        return vae_assign(0,'',$data);
+        return jt_assign(0,'',$data);
     }
 
     //清空缓存
     public function cacheClear()
     {
         \think\Cache::clear();
-        return vae_assign(1,'系统缓存已清空');
+        return jt_assign(1,'系统缓存已清空');
     }
 
     //发送测试邮件
     public function emailto($email)
     {
-        $name = empty(vae_get_config('webconfig.admin_title'))?'vaeThink':vae_get_config('webconfig.admin_title');
-        if(vae_send_email($email,"一封来自{$name}的测试邮件。")){
-            return vae_assign(1,'发送成功，请注意查收');
+        $name = empty(jt_get_config('webconfig.admin_title'))?'vaeThink':jt_get_config('webconfig.admin_title');
+        if(jt_send_email($email,"一封来自{$name}的测试邮件。")){
+            return jt_assign(1,'发送成功，请注意查收');
         }
-        return vae_assign(0,'发送失败');
+        return jt_assign(0,'发送失败');
     }
 
     //修改个人信息
     public function editPersonal()
     {
         return view('admin/edit_personal',[
-            'admin'=>vae_get_login_admin()
+            'admin'=>jt_get_login_admin()
         ]);
     }
 
@@ -123,18 +123,18 @@ class ApiController extends AdminCheckLogin
     public function editPersonalSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Admin.editPersonal');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 unset($param['username']);
-                $aid = vae_get_login_admin('id');
+                $aid = jt_get_login_admin('id');
                 \think\loader::model('Admin')->where([
                     'id'=>$aid
                 ])->strict(false)->field(true)->update($param);
                 \think\Session::set('vae_admin',\think\Db::name('admin')->find($aid));
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -143,7 +143,7 @@ class ApiController extends AdminCheckLogin
     public function editpassword()
     {
         return view('admin/edit_password',[
-            'admin'=>vae_get_login_admin()
+            'admin'=>jt_get_login_admin()
         ]);
     }
 
@@ -151,23 +151,23 @@ class ApiController extends AdminCheckLogin
     public function editpasswordSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Admin.editpwd');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
-                $admin = vae_get_login_admin();
-                if(vae_set_password($param['old_pwd'],$admin['salt']) !== $admin['pwd']) {
-                    return vae_assign(0,'旧密码不正确!');
+                $admin = jt_get_login_admin();
+                if(jt_set_password($param['old_pwd'],$admin['salt']) !== $admin['pwd']) {
+                    return jt_assign(0,'旧密码不正确!');
                 }
                 unset($param['username']);
-                $param['salt']     = vae_set_salt(20);
-                $param['pwd'] = vae_set_password($param['pwd'],$param['salt']);
+                $param['salt']     = jt_set_salt(20);
+                $param['pwd'] = jt_set_password($param['pwd'],$param['salt']);
                 \think\loader::model('Admin')->where([
                     'id'=>$admin['id']
                 ])->strict(false)->field(true)->update($param);
                 \think\Session::set('vae_admin',\think\Db::name('admin')->find($admin['id']));
-                return vae_assign();
+                return jt_assign();
             }
         }
     }

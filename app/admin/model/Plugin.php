@@ -33,7 +33,7 @@ class Plugin extends Model
         
         $plugin = array();
         foreach ($dirArray as $k => $v) {
-        	$class = vae_get_plugin_class($v);
+        	$class = jt_get_plugin_class($v);
         	if (class_exists($class)) {
         		$pluginIndex = new $class;
             	$plugin[$k] = $pluginIndex->explain;
@@ -66,7 +66,7 @@ class Plugin extends Model
             }
             cache($cache_name,null);
 
-            $class = vae_get_plugin_class($param['name']);
+            $class = jt_get_plugin_class($param['name']);
             if (!class_exists($class)) {
                 throw new Exception("当前插件类库不存在，请检查命名空间是否符合规范", 1);
             }
@@ -76,9 +76,9 @@ class Plugin extends Model
             Db::commit();    
         } catch (\Exception $e) {
             Db::rollback();
-            return vae_assign(0,'安装失败:'.$e->getMessage());
+            return jt_assign(0,'安装失败:'.$e->getMessage());
         }
-        return vae_assign(1,'安装成功');
+        return jt_assign(1,'安装成功');
     }
 
     public function uninstall($name)
@@ -104,7 +104,7 @@ class Plugin extends Model
             }
             cache($cache_name,null);
 
-            $class = vae_get_plugin_class($name);
+            $class = jt_get_plugin_class($name);
             if (!class_exists($class)) {
                 throw new Exception("当前插件类库不存在，请检查命名空间是否符合规范", 1);
             }
@@ -114,9 +114,9 @@ class Plugin extends Model
             Db::commit();    
         } catch (\Exception $e) {
             Db::rollback();
-            return vae_assign(0,'卸载失败:'.$e->getMessage());
+            return jt_assign(0,'卸载失败:'.$e->getMessage());
         }
-        return vae_assign(1,'卸载成功');
+        return jt_assign(1,'卸载成功');
     }
 
     public function setConfig($name)
@@ -125,9 +125,9 @@ class Plugin extends Model
             'name' => $name
         ])->find();
         if(empty($plugin)) {
-            return vae_assign(0,'该插件未安装');
+            return jt_assign(0,'该插件未安装');
         }
-        $class = vae_get_plugin_class($name);
+        $class = jt_get_plugin_class($name);
         if (!class_exists($class)) {
             throw new Exception("当前插件类库不存在，请检查命名空间是否符合规范", 1);
         }

@@ -27,18 +27,18 @@ class PortControllerBase extends ControllerBase
         $this->page = !empty($this->param('page')) ? $this->param('page') : 1;
         $this->field = !empty($this->param('field')) ? json_decode($this->param('field'),true) : '*';
         $param = $this->param();
-        vae_set_hook('port_begin',$param);
+        jt_set_hook('port_begin',$param);
     }
 
     protected static function port($code=1, $msg="OK", $data=[], $url='', $httpCode=200, $header = [], $options = []){
-        $port =  vae_assign($code, $msg, $data, $url, $httpCode, $header, $options);
-        vae_set_hook('port_return',$port);
+        $port =  jt_assign($code, $msg, $data, $url, $httpCode, $header, $options);
+        jt_set_hook('port_return',$port);
         return $port;
     }
 
     protected static function param($key=""){
-        $param = vae_get_param();
-        vae_set_hook('port_param',$param);
+        $param = jt_get_param();
+        jt_set_hook('port_param',$param);
         if(!empty($key) and isset($param[$key])){
             $param = $param[$key]; 
         } else if(!empty($key) and !isset($param[$key])){

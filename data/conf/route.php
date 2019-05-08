@@ -15,7 +15,7 @@ use think\Db;
 use think\Cache;
 use think\Route;
 
-if (!vae_is_installed()) {
+if (!jt_is_installed()) {
     return;
 }
 if(Cache::get('vae_route')) {

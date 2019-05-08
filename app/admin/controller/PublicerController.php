@@ -22,10 +22,10 @@ class PublicerController extends ControllerBase
     //登录
     public function login()
     {
-        if(vae_get_login_admin()) {
+        if(jt_get_login_admin()) {
             $this->redirect('admin/index/index');
         } else {
-            $adminLoginHook = vae_set_hook_one('admin_login');
+            $adminLoginHook = jt_set_hook_one('admin_login');
             if(!empty($adminLoginHook)) {
                 return $adminLoginHook;
             }
@@ -37,21 +37,21 @@ class PublicerController extends ControllerBase
     public function loginSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Publicer');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 $admin = Db::name('admin')->where(['username'=>$param['username']])->find();
                 if(empty($admin)) {
-                    return vae_assign(0,'用户名或密码错误');
+                    return jt_assign(0,'用户名或密码错误');
                 }
-                $param['pwd'] = vae_set_password($param['password'],$admin['salt']);
+                $param['pwd'] = jt_set_password($param['password'],$admin['salt']);
                 if($admin['pwd'] !== $param['pwd']) {
-                    return vae_assign(0,'用户名或密码错误');
+                    return jt_assign(0,'用户名或密码错误');
                 }
                 if($admin['status'] == -1){
-                    return vae_assign(0,'该用户禁止登陆,请于系统所有者联系');
+                    return jt_assign(0,'该用户禁止登陆,请于系统所有者联系');
                 }
                 $data = [
                     'last_login_time' => time(),
@@ -60,7 +60,7 @@ class PublicerController extends ControllerBase
                 ];
                 Db::name('admin')->where(['id'=>$admin['id']])->update($data);
                 \think\Session::set('vae_admin',$admin);
-                return vae_assign(1,'登入成功');
+                return jt_assign(1,'登入成功');
             }
         }
     }
@@ -69,6 +69,6 @@ class PublicerController extends ControllerBase
     public function logout()
     {
         \think\Session::delete('vae_admin');
-        return vae_assign(1,"退出成功");
+        return jt_assign(1,"退出成功");
     }
 }

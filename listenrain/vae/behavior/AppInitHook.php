@@ -17,7 +17,7 @@ class AppInitHook
 {
 	public function run(&$params){ 
         //\think\Session::delete('vae_admin');  
-		if (!vae_is_installed()) {
+		if (!jt_is_installed()) {
             return;
         }
 
@@ -34,7 +34,7 @@ class AppInitHook
 
         if (!empty($appHookPlugin)) {
             foreach ($appHookPlugin as $hookPlugin) {
-                Hook::add($hookPlugin['hook'], vae_get_plugin_class($hookPlugin['plugin']));
+                Hook::add($hookPlugin['hook'], jt_get_plugin_class($hookPlugin['plugin']));
             }
         }
     }

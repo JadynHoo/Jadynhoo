@@ -22,23 +22,23 @@ class MenuController extends AdminCheckAuth
     public function getMenuList()
     {
     	$menu = \think\Db::name('admin_menu')->order('order asc')->select();
-    	return vae_assign(0,'',$menu);
+    	return jt_assign(0,'',$menu);
     }
 
     //添加菜单页面
     public function add()
     {
-    	return view('',['pid'=>vae_get_param('pid')]);
+    	return view('',['pid'=>jt_get_param('pid')]);
     }
 
     //提交添加
     public function addSubmit()
     {
     	if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
     		$result = $this->validate($param, 'app\admin\validate\AdminMenu.add');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 $mid = \think\loader::model('AdminMenu')->strict(false)->field(true)->insertGetId($param);
                 //自动为系统所有者管理组分配新增的菜单
@@ -49,7 +49,7 @@ class MenuController extends AdminCheckAuth
                 }
                 //清除菜单缓存
                 \think\Cache::clear('VAE_ADMIN_MENU');
-                return vae_assign();
+                return jt_assign();
             }
     	}
     }
@@ -58,17 +58,17 @@ class MenuController extends AdminCheckAuth
     public function editSubmit()
     {
         if($this->request->isPost()) {
-        	$param = vae_get_param();
+        	$param = jt_get_param();
         	$result = $this->validate($param, 'app\admin\validate\AdminMenu.edit');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
             	$data[$param['field']] = $param['value'];
             	$data['id'] = $param['id'];
                 \think\loader::model('AdminMenu')->strict(false)->field(true)->update($data);
                 //清除菜单缓存
                 \think\Cache::clear('VAE_ADMIN_MENU');
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -76,16 +76,16 @@ class MenuController extends AdminCheckAuth
     //删除
     public function delete()
     {
-        $id    = vae_get_param("id");
+        $id    = jt_get_param("id");
         $count = \think\Db::name('AdminMenu')->where(["pid" => $id])->count();
         if ($count > 0) {
-            return vae_assign(0,"该菜单下还有子菜单，无法删除！");
+            return jt_assign(0,"该菜单下还有子菜单，无法删除！");
         }
         if (\think\Db::name('AdminMenu')->delete($id) !== false) {
             \think\Cache::clear('VAE_ADMIN_MENU');// 删除后台菜单缓存
-            return vae_assign(1,"删除菜单成功！");
+            return jt_assign(1,"删除菜单成功！");
         } else {
-            return vae_assign(0,"删除失败！");
+            return jt_assign(0,"删除失败！");
         }
     }
 }

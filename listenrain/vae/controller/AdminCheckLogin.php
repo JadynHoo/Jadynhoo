@@ -25,7 +25,7 @@ class AdminCheckLogin extends ControllerBase
     //验证后台模块登录
     private function checkLogin()
     {
-        if(!vae_get_login_admin()) {
+        if(!jt_get_login_admin()) {
             $this->redirect('admin/publicer/login');
             die;
         }

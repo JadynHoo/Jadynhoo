@@ -16,7 +16,7 @@
     <div class="layui-input-block">
       <select name="pid" lay-verify="required" lay-search="">
         <option value="0">作为顶级菜单</option>
-        {volist name=":vae_set_recursion(vae_get_admin_menu())" id="v"}
+        {volist name=":jt_set_recursion(jt_get_admin_menu())" id="v"}
         <option value="{$v.id}" {eq name="pid" value="$v.id"}selected=""{/eq}>{$v.title}</option>
         {/volist}
       </select>

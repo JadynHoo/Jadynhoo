@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 //返回json格式的数据
-function vae_assign($code=1, $msg="OK", $data=[], $url='', $httpCode=200, $header = [], $options = []){
+function jt_assign($code=1, $msg="OK", $data=[], $url='', $httpCode=200, $header = [], $options = []){
     $res=['code'=>$code];
     $res['msg']=$msg;
     $res['url']=$url;
@@ -23,7 +23,7 @@ function vae_assign($code=1, $msg="OK", $data=[], $url='', $httpCode=200, $heade
 }
 
 //针对layui数据列表的返回数据方法
-function vae_assign_table($code=0, $msg='', $data, $httpCode=200, $header = [], $options = []){
+function jt_assign_table($code=0, $msg='', $data, $httpCode=200, $header = [], $options = []){
     $res['code'] = $code;
     $res['msg'] = $msg;
     if(is_object($data)) {
@@ -40,19 +40,19 @@ function vae_assign_table($code=0, $msg='', $data, $httpCode=200, $header = [], 
 }
 
 //获取url参数
-function vae_get_param($key=""){
+function jt_get_param($key=""){
     return \think\Request::instance()->param($key);
 }
 
 //随机字符串，默认长度10
-function vae_set_salt($num = 10){
+function jt_set_salt($num = 10){
     $str = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890';
     $salt = substr(str_shuffle($str), 10, $num);
     return $salt;
 }
 
 //获取后台模块当前登录用户的信息
-function vae_get_login_admin($key=""){
+function jt_get_login_admin($key=""){
     if(\think\Session::has('vae_admin')) {
         $vae_admin = \think\Session::get('vae_admin');
         if(!empty($key)) {
@@ -71,7 +71,7 @@ function vae_get_login_admin($key=""){
 }
 
 //获取指定管理员的信息
-function vae_get_admin($id)
+function jt_get_admin($id)
 {
     $admin = \think\Db::name('admin')->where(['id'=>$id])->find();
     $admin['group_id'] = \think\Db::name('admin_group_access')->where(['uid'=>$id])->column('group_id');
@@ -79,25 +79,25 @@ function vae_get_admin($id)
 }
 
 //读取后台菜单列表
-function vae_get_admin_menu(){
+function jt_get_admin_menu(){
     $menu = \think\Db::name('admin_menu')->order('order asc')->select();
     return $menu;
 }
 
 //读取权限节点列表
-function vae_get_admin_rule(){
+function jt_get_admin_rule(){
     $rule = \think\Db::name('admin_rule')->order('create_time asc')->select();
     return $rule;
 }
 
 //读取权限分组列表
-function vae_get_admin_group(){
+function jt_get_admin_group(){
     $group = \think\Db::name('admin_group')->order('create_time asc')->select();
     return $group;
 }
 
 //读取指定权限分组详情
-function vae_get_admin_group_info($id){
+function jt_get_admin_group_info($id){
     $group = \think\Db::name('admin_group')->where(['id'=>$id])->find();
     $group['rules'] = explode(',',$group['rules']);
     $group['menus'] = explode(',',$group['menus']);
@@ -105,13 +105,13 @@ function vae_get_admin_group_info($id){
 }
 
 //读取文章分类列表
-function vae_get_article_cate(){
+function jt_get_article_cate(){
     $cate = \think\Db::name('article_cate')->order('create_time asc')->select();
     return $cate;
 }
 
 //读取指定分类下的文章列表
-function vae_get_article($cate_id=""){
+function jt_get_article($cate_id=""){
     $where = array();
     if(!empty($cate_id)) {
         $where['article_cate_id'] = $cate_id;
@@ -121,7 +121,7 @@ function vae_get_article($cate_id=""){
 }
 
 //读取指定文章的详情
-function vae_get_article_info($id)
+function jt_get_article_info($id)
 {
     $article = \think\Db::name('article')->where(['id'=>$id])->find();
     if(empty($article)) {
@@ -131,7 +131,7 @@ function vae_get_article_info($id)
 }
 
 //递归排序
-function vae_set_recursion($result,$pid=0,$format="L "){
+function jt_set_recursion($result,$pid=0,$format="L "){
     /*记录排序后的类别数组*/
     static $list=array();
  
@@ -142,14 +142,14 @@ function vae_set_recursion($result,$pid=0,$format="L "){
             }
             /*将该类别的数据放入list中*/
             $list[]=$v;
-            vae_set_recursion($result,$v['id'],"  ".$format);
+            jt_set_recursion($result,$v['id'],"  ".$format);
         }
     }
  
     return $list;
 }
 
-function vae_list_to_tree($list, $pk = 'id', $pid = 'pid', $child = 'list', $root = 0)
+function jt_list_to_tree($list, $pk = 'id', $pid = 'pid', $child = 'list', $root = 0)
 {
     // 创建Tree
     $tree = array();
@@ -176,12 +176,12 @@ function vae_list_to_tree($list, $pk = 'id', $pid = 'pid', $child = 'list', $roo
 }
 
 //菜单父子关系排序，用于后台菜单DOM
-function vae_set_admin_menu(){
-    if(\think\Cache::tag('VAE_ADMIN_MENU')->get('menu'.vae_get_login_admin('id'))) {
-        $list = \think\Cache::tag('VAE_ADMIN_MENU')->get('menu'.vae_get_login_admin('id'));
+function jt_set_admin_menu(){
+    if(\think\Cache::tag('VAE_ADMIN_MENU')->get('menu'.jt_get_login_admin('id'))) {
+        $list = \think\Cache::tag('VAE_ADMIN_MENU')->get('menu'.jt_get_login_admin('id'));
     } else {
         $adminGroup = \think\Db::name('admin_group_access')->where([
-            'uid' => vae_get_login_admin('id')
+            'uid' => jt_get_login_admin('id')
         ])->column('group_id');
         $adminMenu = \think\Db::name('admin_group')->where([
             'id' => ['IN',$adminGroup]
@@ -194,14 +194,14 @@ function vae_set_admin_menu(){
         $menu = \think\Db::name('admin_menu')->where([
             'id' => ['IN',$adminMenus]
         ])->order('order asc')->select();
-        $list = vae_list_to_tree($menu);
-        \think\Cache::tag('VAE_ADMIN_MENU')->set('menu'.vae_get_login_admin('id'),$list);
+        $list = jt_list_to_tree($menu);
+        \think\Cache::tag('VAE_ADMIN_MENU')->set('menu'.jt_get_login_admin('id'),$list);
     }
     return $list;
 }
 
 //文件上传
-function vae_upload($module,$use){
+function jt_upload($module,$use){
     if(request()->file('file')){
         $file = request()->file('file');
     }else{
@@ -210,27 +210,27 @@ function vae_upload($module,$use){
         return $res;
     }
     //上传开始前的钩子
-    vae_set_hook('upload_begin',$file);
+    jt_set_hook('upload_begin',$file);
     $info = $file->rule('sha1')->move(JT_ROOT . 'public' . DS . 'upload' . DS . $module . DS . $use);
     if($info) {
         //文件上传成功后的钩子
-        vae_set_hook('upload_end',$file);
+        jt_set_hook('upload_end',$file);
         $res['code'] = 1;
         $res['data'] = DS . 'upload' . DS . $module . DS . $use . DS . $info->getSaveName();
         return $res;
     } else {
         // 上传失败获取错误信息
-        return vae_assign(0,'上传失败：'.$file->getError());
+        return jt_assign(0,'上传失败：'.$file->getError());
     }
 }
 
 //vaeThink加密方式
-function vae_set_password($pwd, $salt){
+function jt_set_password($pwd, $salt){
     return md5(md5($pwd.$salt).$salt);
 }
 
 //判断vaeThink是否完成安装
-function vae_is_installed()
+function jt_is_installed()
 {
     static $vaeIsInstalled;
     if (empty($vaeIsInstalled)) {
@@ -240,14 +240,14 @@ function vae_is_installed()
 }
 
 //发邮件
-function vae_send_email($to,$title,$content=""){
-    $config = vae_get_config('emailconfig');
+function jt_send_email($to,$title,$content=""){
+    $config = jt_get_config('emailconfig');
     if(NULL == $config) {
-        return vae_assign(0,'请先在系统->配置->邮箱配置中配置您的SMTP信息且完成提交');
+        return jt_assign(0,'请先在系统->配置->邮箱配置中配置您的SMTP信息且完成提交');
     }
 
     if(empty($content) and empty($config['template'])) {
-        return vae_assign(0,'请提供邮件要发送的内容');
+        return jt_assign(0,'请提供邮件要发送的内容');
     }
 
     $content = empty($content) ? $config['template'] : $content;
@@ -287,13 +287,13 @@ function vae_send_email($to,$title,$content=""){
 }
 
 //取系统配置
-function vae_get_config($key)
+function jt_get_config($key)
 {
     return \think\Config::get($key);
 }
 
 //系统信息
-function vae_get_system_info($key)
+function jt_get_system_info($key)
 {
     $system = [
         'os' => PHP_OS,
@@ -310,7 +310,7 @@ function vae_get_system_info($key)
 }
 
 //获取插件类的类名
-function vae_get_plugin_class($name)
+function jt_get_plugin_class($name)
 {
     $name      = ucwords($name);
     $plugin = \think\Loader::parseName($name, 0, true);
@@ -319,25 +319,25 @@ function vae_get_plugin_class($name)
 }
 
 //设置钩子
-function vae_set_hook($hook, &$params = null, $extra = null)
+function jt_set_hook($hook, &$params = null, $extra = null)
 {
     return \think\Hook::listen($hook, $params, $extra = null);
 }
 
 //设置一个钩子
-function vae_set_hook_one($hook, &$params = null, $extra = null)
+function jt_set_hook_one($hook, &$params = null, $extra = null)
 {
     return \think\Hook::listen($hook, $params, $extra, true);
 }
 
 //读取导航列表,用于后台
-function vae_get_nav($nav_id){
+function jt_get_nav($nav_id){
     $nav = \think\Db::name('NavInfo')->where('nav_id',$nav_id)->order('order asc')->select();
     return $nav;
 }
 
 //读取导航列表，用于前台
-function vae_get_navs($name){
+function jt_get_navs($name){
     if(!cache('VAE_NAV'.$name)) {
         $nav_id = \think\Db::name('Nav')->where(['name'=>$name,'status'=>1])->value('id');
         if(empty($nav_id)){
@@ -356,7 +356,7 @@ function vae_get_navs($name){
  * @param $url
  * @param array $param
  */
-function vae_get_route_url($params = [], $url = '')
+function jt_get_route_url($params = [], $url = '')
 {
     $request = \think\Request::instance();
     $get = $request->param();
@@ -380,7 +380,7 @@ function vae_get_route_url($params = [], $url = '')
 }
 
 //发短信
-function vae_send_sms($phone,$param,$code,$type="normal")
+function jt_send_sms($phone,$param,$code,$type="normal")
 {
     // 配置信息
     include JT_LTR."dayu/top/TopClient.php";
@@ -412,7 +412,7 @@ function vae_send_sms($phone,$param,$code,$type="normal")
 }
 
 //读取轮播图，用于前台
-function vae_get_slide($name)
+function jt_get_slide($name)
 {
     if(!cache('VAE_SLIDE'.$name)) {
         $slide_id = \think\Db::name('slide')->where(['name'=>$name,'status'=>1])->value('id');

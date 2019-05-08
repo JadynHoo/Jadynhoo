@@ -22,7 +22,7 @@ class SlideController extends AdminCheckAuth
     //列表
     public function getSlideList()
     {
-    	$param = vae_get_param();
+    	$param = jt_get_param();
         $where = array();
         if(!empty($param['keywords'])) {
             $where['id|name|title|desc'] = ['like', '%' . $param['keywords'] . '%'];
@@ -32,7 +32,7 @@ class SlideController extends AdminCheckAuth
     			->order('create_time asc')
                 ->where($where)
     			->paginate($rows,false,['query'=>$param]);
-    	return vae_assign_table(0,'',$slide);
+    	return jt_assign_table(0,'',$slide);
     }
 
     //添加
@@ -45,13 +45,13 @@ class SlideController extends AdminCheckAuth
     public function addSubmit()
     {
     	if($this->request->isPost()){
-    		$param = vae_get_param();
+    		$param = jt_get_param();
     		$result = $this->validate($param, 'app\admin\validate\Slide.add');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
 				\think\loader::model('Slide')->strict(false)->field(true)->insert($param);
-                return vae_assign();
+                return jt_assign();
             }
     	}
     }
@@ -59,7 +59,7 @@ class SlideController extends AdminCheckAuth
     //修改
     public function edit()
     {
-        $id    = vae_get_param('id');
+        $id    = jt_get_param('id');
         $slide = Db::name('slide')->find($id);
         return view('',[
             'slide'=>$slide
@@ -70,16 +70,16 @@ class SlideController extends AdminCheckAuth
     public function editSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Slide.edit');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 \think\loader::model('Slide')->where([
                     'id'=>$param['id']
                 ])->strict(false)->field(true)->update($param);
                 \think\Cache::clear('VAE_SALIDE');
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -87,18 +87,18 @@ class SlideController extends AdminCheckAuth
     //删除
     public function delete()
     {
-        $id    = vae_get_param("id");
+        $id    = jt_get_param("id");
         $count = Db::name('SlideInfo')->where([
             'slide_id' => $id
         ])->count();
         if($count > 0) {
-            return vae_assign(0,'该组下还有幻灯片，无法删除');
+            return jt_assign(0,'该组下还有幻灯片，无法删除');
         }
         if (Db::name('Slide')->delete($id) !== false) {
-            return vae_assign(1,"删除成功！");
+            return jt_assign(1,"删除成功！");
             \think\Cache::clear('VAE_SALIDE');
         } else {
-            return vae_assign(0,"删除失败！");
+            return jt_assign(0,"删除失败！");
         }
     }
 
@@ -106,25 +106,25 @@ class SlideController extends AdminCheckAuth
     public function slideInfo()
     {
         return view('',[
-            'slide_id' => vae_get_param('id')
+            'slide_id' => jt_get_param('id')
         ]);
     }
 
     //幻灯片列表
     public function getSlideInfoList()
     {
-        $id            = vae_get_param('id');
+        $id            = jt_get_param('id');
         $slideInfoList = Db::name('SlideInfo')->where([
             'slide_id' => $id
         ])->select();
-        return vae_assign(0,'',$slideInfoList);
+        return jt_assign(0,'',$slideInfoList);
     }
 
     //添加幻灯片
     public function addSlideInfo()
     {
         return view('',[
-            'slide_id' => vae_get_param('id')
+            'slide_id' => jt_get_param('id')
         ]);
     }
 
@@ -132,14 +132,14 @@ class SlideController extends AdminCheckAuth
     public function addSlideInfoSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Slide.addInfo');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 \think\loader::model('SlideInfo')->strict(false)->field(true)->insert($param);
                 \think\Cache::clear('VAE_SALIDE_INFO');
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -147,7 +147,7 @@ class SlideController extends AdminCheckAuth
     //修改幻灯片
     public function editSlideInfo()
     {
-        $id = vae_get_param('id');
+        $id = jt_get_param('id');
         $slideInfo = Db::name('SlideInfo')->find($id);
         return view('',[
             'slideInfo' => $slideInfo
@@ -158,16 +158,16 @@ class SlideController extends AdminCheckAuth
     public function editSlideInfoSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Slide.editInfo');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 \think\loader::model('SlideInfo')->where([
                     'id' => $param['id']
                 ])->strict(false)->field(true)->update($param);
                 \think\Cache::clear('VAE_SALIDE_INFO');
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -175,12 +175,12 @@ class SlideController extends AdminCheckAuth
     //删除幻灯片
     public function deleteSlideInfo()
     {
-        $id    = vae_get_param("id");
+        $id    = jt_get_param("id");
         if (Db::name('SlideInfo')->delete($id) !== false) {
-            return vae_assign(1,"删除成功！");
+            return jt_assign(1,"删除成功！");
             \think\Cache::clear('VAE_SALIDE_INFO');
         } else {
-            return vae_assign(0,"删除失败！");
+            return jt_assign(0,"删除失败！");
         }
     }
 }

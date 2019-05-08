@@ -25,13 +25,13 @@ class PluginController extends AdminCheckAuth
     {
         $pluginModel = new PluginModel;
         $plugins = $pluginModel->getPlugin();
-        return vae_assign(0,'',$plugins);
+        return jt_assign(0,'',$plugins);
     }
 
     //禁用
     public function disabled()
     {
-        $name =  vae_get_param('name');
+        $name =  jt_get_param('name');
         Db::name('HookPlugin')->where([
             'plugin' => $name
         ])->update([
@@ -46,13 +46,13 @@ class PluginController extends AdminCheckAuth
             $cache_name = "module_init_hook_plugin_{$module}";
         }
         cache($cache_name,null);
-        return vae_assign(1,'禁用成功');
+        return jt_assign(1,'禁用成功');
     }
 
     //启用
     public function start()
     {
-        $name =  vae_get_param('name');
+        $name =  jt_get_param('name');
         Db::name('HookPlugin')->where([
             'plugin' => $name
         ])->update([
@@ -67,13 +67,13 @@ class PluginController extends AdminCheckAuth
             $cache_name = "module_init_hook_plugin_{$module}";
         }
         cache($cache_name,null);
-        return vae_assign(1,'启用成功');
+        return jt_assign(1,'启用成功');
     }
 
     //卸载
     public function uninstall()
     {
-        $name =  vae_get_param('name');
+        $name =  jt_get_param('name');
         $pluginModel = new PluginModel;
         $plugins = $pluginModel->uninstall($name);
         return $plugins;
@@ -82,7 +82,7 @@ class PluginController extends AdminCheckAuth
     //安装
     public function install()
     {
-        $param =  vae_get_param();
+        $param =  jt_get_param();
         $pluginModel = new PluginModel;
         $plugins = $pluginModel->install($param);
         return $plugins;
@@ -91,7 +91,7 @@ class PluginController extends AdminCheckAuth
     //配置
     public function setConfig()
     {
-        $name =  vae_get_param('name');
+        $name =  jt_get_param('name');
         $pluginModel = new PluginModel;
         $plugins = $pluginModel->setConfig($name);
         return $plugins;

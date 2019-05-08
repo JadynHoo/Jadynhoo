@@ -23,7 +23,7 @@ class ArticleController extends AdminCheckAuth
     //列表
     public function getContentList()
     {
-    	$param = vae_get_param();
+    	$param = jt_get_param();
         $where = array();
         if(!empty($param['keywords'])) {
             $where['a.id|a.title|a.keywords|a.desc|a.content|w.title'] = ['like', '%' . $param['keywords'] . '%'];
@@ -40,7 +40,7 @@ class ArticleController extends AdminCheckAuth
                 ->where($where)
     			->paginate($rows,false,['query'=>$param]);
 
-    	return vae_assign_table(0,'',$content);
+    	return jt_assign_table(0,'',$content);
     }
 
     //添加
@@ -53,13 +53,13 @@ class ArticleController extends AdminCheckAuth
     public function addSubmit()
     {
     	if($this->request->isPost()){
-    		$param = vae_get_param();
+    		$param = jt_get_param();
     		$result = $this->validate($param, 'app\admin\validate\Article.add');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 \think\loader::model('Article')->strict(false)->field(true)->insert($param);
-                return vae_assign();
+                return jt_assign();
             }
     	}
     }
@@ -67,21 +67,21 @@ class ArticleController extends AdminCheckAuth
     //修改
     public function edit()
     {
-        return view('',['article'=>vae_get_article_info(vae_get_param('id'))]);
+        return view('',['article'=>jt_get_article_info(jt_get_param('id'))]);
     }
 
     //提交修改
     public function editSubmit()
     {
         if($this->request->isPost()){
-            $param = vae_get_param();
+            $param = jt_get_param();
             $result = $this->validate($param, 'app\admin\validate\Article.edit');
             if ($result !== true) {
-                return vae_assign(0,$result);
+                return jt_assign(0,$result);
             } else {
                 \think\loader::model('Article')->where(['id'=>$param['id']])->strict(false)->field(true)->update($param);
                 \think\Cache::clear('VAE_ARTICLE_INFO');
-                return vae_assign();
+                return jt_assign();
             }
         }
     }
@@ -89,12 +89,12 @@ class ArticleController extends AdminCheckAuth
     //软删除
     public function delete()
     {
-        $id    = vae_get_param("id");
+        $id    = jt_get_param("id");
         if (ArticleModel::destroy($id) !== false) {
-            return vae_assign(1,"成功放入回收站！");
+            return jt_assign(1,"成功放入回收站！");
             \think\Cache::clear('VAE_ARTICLE_INFO');
         } else {
-            return vae_assign(0,"删除失败！");
+            return jt_assign(0,"删除失败！");
         }
     }
 }

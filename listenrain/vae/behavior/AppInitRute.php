@@ -16,7 +16,7 @@ class AppInitRute
 {
     public function run(&$param)
     {
-        if (!vae_is_installed()) {
+        if (!jt_is_installed()) {
             return;
         }
 
@@ -25,7 +25,7 @@ class AppInitRute
         if($urlArray[1] === 'plugin') {
 
             if(count($urlArray) < 5) {
-                return vae_assign(0,'非法请求');
+                return jt_assign(0,'非法请求');
             }
 
             $plugin = $urlArray[2];
