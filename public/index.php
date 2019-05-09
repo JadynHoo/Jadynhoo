@@ -20,13 +20,13 @@ define('LAYUI_VERSION','2.4.5');
 // 定义应用目录
 define('APP_PATH', __DIR__ . '/../app/');
 
-// 定义vaeThink项目目录
+// 定义JTThink项目目录
 define('JT_ROOT', __DIR__ . '/../');
 
 // 定义插件目录
 define('PLUGIN_PATH', __DIR__ . '/plugin/');
 
-// 定义vaeThink核心包目录
+// 定义JTThink核心包目录
 define('JT_LTR', JT_ROOT . 'listenrain/vae/');
 
 // 定义配置文件目录
