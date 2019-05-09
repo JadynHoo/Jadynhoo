@@ -11,8 +11,8 @@
 
 // [ 应用入口文件 ]
 
-// 定义vaeThink当前版本号
-define('VAE_VERSION','1.0.1');
+// 定义JTThink当前版本号
+define('JT_VERSION','1.0.1');
 
 // 定义Layui版本号
 define('LAYUI_VERSION','2.4.5');

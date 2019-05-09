@@ -1,0 +1,1 @@
+<?php return ['admin_title'=>'JTTHINK','title'=>'JTTHINK','keywords'=>'JTTHINK','logo'=>'\upload\admin\thumb\f9\872bba540e490316e29f3a99d311c8904bc13c.jpg','desc'=>'JTTHINK','icp'=>'123123','code'=>'123123','domain'=>'jadynhoo.com','port_cache_time'=>''];
